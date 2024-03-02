@@ -83,15 +83,15 @@ module ActiveSnapshot
               if children_to_keep.exclude?(key)
                 delete_method.call(child_record)
               end
-            end
-          end
+            end if h[:records].present?
+          end if existing_snapshot_children.present?
         end
 
         ### Create or Update Items from Snapshot Items
         cached_snapshot_items.each do |snapshot_item|
           snapshot_item.restore_item!
-        end
-      end
+        end if cached_snapshot_items.present?
+      end 
 
       return true
     end
@@ -116,7 +116,7 @@ module ActiveSnapshot
         elsif self.item_id == si.item_id && (self.item_type == si.item_type || si.item_type.constantize.new.is_a?(self.item_type.constantize))
           reified_parent = reified_item
         end
-      end
+      end if snapshot_items.present?
 
       return [reified_parent, reified_children_hash]
     end
